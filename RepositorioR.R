@@ -19,7 +19,14 @@ COD_GDP <- WDIsearch('gdp')
 #Com o código, vamos baixar os dados
 
 options(scipen= 999) #ajustar numeros(notação cientifica)
+
+#Dados em Painel
 baseib <- WDI(country="all", indicator="NY.GDP.MKTP.CD")
 
+#Corte Transversal
 basepib2023 <- WDI(country="all", indicator="NY.GDP.MKTP.CD",
                    start= 2023, end= 2023)
+
+#Serie temporal
+dadospibbr <- WDI(country = 'BR',
+                  indicator = 'NY.GDP.MKTP.CD')
