@@ -1,0 +1,77 @@
+---
+title: "Cláudio Henrique Raimundo"
+format: html
+editor: visual
+---
+
+```{r}
+#| label: load-packages # nomes únicos
+#| include: false # não inclui o resultado no doc
+
+library(tidyverse) # pacote ggplot2 (gráficos)
+library(WDI) # pacote dos dados
+
+# BASES DE DADOS
+# COLOCAR OS TRÊS OBJETOS DE DADOS
+
+# EXEMPLO DA AULA 6
+# DADOS EM PAINEL
+dadospib <- WDI(country = 'all',
+              indicator = 'SE.SEC.UNER.LO.MA.ZS')
+# CORTE TRANSVERSAL
+dadospib2023 <- WDI(country = 'all',
+                  indicator = 'SE.SEC.UNER.LO.MA.ZS',
+                  start = 2023, end = 2023)
+# SÉRIE TEMPORAL
+dadospibbr <- WDI(country = 'BR',
+                indicator = 'SE.SEC.UNER.LO.MA.ZS')
+```
+
+## VARIÁVEL
+
+Taxa de desemprego de homens com ensino medio incompleto
+
+## GRÁFICO COM DADOS EM PAINEL
+
+Falar sobre o gráfico com dados em painel.
+
+```{r}
+#| label: dadosempainel
+#| warning: false
+#| echo: false
+
+ggplot(data = dadospib,
+       mapping = aes(y = SE.SEC.UNER.LO.MA.ZS,
+                     x = year)) +
+  geom_point()
+```
+
+## GRÁFICO COM CORTE TRANSVERSAL
+
+ano 2023
+
+```{r}
+#| label: dadoscortetransversal
+#| warning: false 
+#| echo: false  
+
+ggplot(dadospib2023,
+       mapping = aes(y = SE.SEC.UNER.LO.MA.ZS,
+                     x = year)) +
+  geom_point()
+```
+
+## GRÁFICO COM SÉRIE TEMPORAL
+
+Falar sobre o gráfico com dados de série temporal.
+
+```{r}
+#| label: dadosserietemporal
+#| warning: false 
+#| echo: false
+
+ggplot(dadospibbr,
+       mapping = aes(y = SE.SEC.UNER.LO.MA.ZS,
+                     x = year)) +
+  geom_line()
+```
