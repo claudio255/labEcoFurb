@@ -1,0 +1,102 @@
+---
+title: "Cláudio"
+format: html
+editor: visual
+---
+
+```{r}
+#| label: load-packages # nomes únicos
+#| include: false # não inclui o resultado no doc
+
+library(tidyverse) # pacote ggplot2 (gráficos)
+library(WDI) # pacote dos dados
+
+paisesDaAmericaDoSul <- c("AR", "BO", "BR", "CL", "CO", "EC", "GY", "PY", "PE", "SR", "UY", "VE")
+# BASES DE DADOS
+# COLOCAR OS TRÊS OBJETOS DE DADOS
+
+# EXEMPLO DA AULA 6
+# DADOS EM PAINEL
+dadosEletricidade <- WDI(country = paisesDaAmericaDoSul,
+              indicator = 'EG.ELC.ACCS.ZS',
+              start = 1990, end = 2023)
+# CORTE TRANSVERSAL
+dadosEletricidade2023 <- WDI(country = paisesDaAmericaDoSul,
+                  indicator = 'EG.ELC.ACCS.ZS',
+                  start = 2023, end = 2023)
+# SÉRIE TEMPORAL
+dadosEletricidadeBr <- WDI(country = 'BR',
+                indicator = 'EG.ELC.ACCS.ZS',
+                start = 1990, end = 2023)
+```
+
+## VARIÁVEL
+
+Taxa de desemprego de homens com ensino medio incompleto
+
+## GRÁFICO COM DADOS EM PAINEL
+
+Falar sobre o gráfico com dados em painel.
+
+```{r}
+#| label: dadosempainel
+#| warning: false
+#| echo: false
+
+ggplot(data = dadosEletricidade,
+       aes(x = year, y = EG.ELC.ACCS.ZS, color = country)) +
+  geom_line(size = 1, na.rm = TRUE) +
+  scale_y_continuous(breaks = seq(0, 100, 5), labels = scales::label_percent(scale = 1)) +
+  scale_x_continuous(breaks = seq(1990, 2023, 5), guide = guide_axis(n.dodge = 2)) +
+  labs(title = "Acesso à eletricidade na América do Sul (1990–2025)",
+       x = "Ano", y = "Porcentagem da população com acesso",
+       color = "País") +
+  theme_minimal(base_size = 14) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+```
+
+## GRÁFICO COM CORTE TRANSVERSAL
+
+ano 2023
+
+```{r, fig.width=10, fig.height=8}
+#| label: dadoscortetransversal
+#| warning: false 
+#| echo: false  
+
+ggplot(dadosEletricidade2023,
+       aes(x = reorder(country, EG.ELC.ACCS.ZS), y = EG.ELC.ACCS.ZS, fill = EG.ELC.ACCS.ZS)) +
+  geom_col() +
+  coord_flip() +
+  scale_fill_viridis_c() +
+  scale_y_continuous(breaks = seq(0, 100, 10), 
+                     limits = c(0, 100),
+                     expand = c(0, 0),
+                     labels = scales::label_percent(scale = 1)) +
+  labs(title = "Acesso à eletricidade em 2023",
+       x = "País", y = "Porcentagem da população com acesso",
+       fill = "Porcentagem") +
+  theme_minimal(base_size = 20) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+```
+
+## GRÁFICO COM SÉRIE TEMPORAL
+
+Falar sobre o gráfico com dados de série temporal.
+
+```{r}
+#| label: dadosserietemporal
+#| warning: false 
+#| echo: false
+
+ggplot(dadosEletricidadeBr,
+       aes(x = year, y = EG.ELC.ACCS.ZS)) +
+  geom_line(color = "darkgreen", size = 1) +
+  geom_point(color = "black", size = 2) +
+  scale_y_continuous(breaks = seq(0, 100, 2), labels = scales::label_percent(scale = 1)) +
+  scale_x_continuous(breaks = seq(1990, 2023, 5), guide = guide_axis(n.dodge = 2)) +
+  labs(title = "Acesso à eletricidade no brasil (1990-2023)",
+       x = "Ano", y = "Porcentagem da população com acesso") +
+  theme_minimal(base_size = 14) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+```
